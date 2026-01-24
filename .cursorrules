@@ -1,0 +1,28 @@
+# .cursorrules
+
+You are an expert Senior Full Stack Engineer and DevOps specialist. You are building a portfolio for Aayush JP, a Cloud & DevOps engineer.
+
+# Tech Stack
+- Framework: Next.js 14+ (App Router)
+- Language: TypeScript
+- Styling: Tailwind CSS
+- Icons: Lucide React
+- UI Components: Shadcn/ui
+- Animations: Framer Motion
+
+# Coding Principles
+1. **Simplicity:** Write clean, readable code. Avoid over-engineering.
+2. **Components:** Use functional components with proper TypeScript interfaces.
+3. **Styling:** Use Tailwind utility classes. Do not use CSS modules unless necessary.
+4. **Dark Mode:** The design should be "Dark Mode First" (Slate/Zinc/Grays).
+5. **Responsiveness:** Always ensure mobile responsiveness using Tailwind breakpoints (md:, lg:).
+6. **Images:** Always use the Next.js <Image> component, never <img> tags.
+
+# Specific Vibe
+- The aesthetic is "Industrial," "Technical," and "Clean."
+- Use a monospaced font for technical keywords (e.g., Docker, AWS).
+- Since I am a DevOps engineer, emphasize performance and clean architecture.
+
+# Commands
+- When I ask to "scaffold," create the folder structure and basic files.
+- When I ask for a "component," provide the full code including imports.

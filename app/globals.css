@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0e14;
+  color: #b3b1ad;
+  font-family: var(--font-jetbrains-mono);
+  scroll-behavior: smooth;
+}
+
+/* Apply Inter to paragraphs for better readability */
+p {
+  font-family: var(--font-inter);
+}
+
+/* Keep JetBrains Mono for headings and code */
+h1, h2, h3, h4, h5, h6, code, pre {
+  font-family: var(--font-jetbrains-mono);
+}
+
+::selection {
+  background: #39ff14;
+  color: #0a0e14;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+/* Terminal cursor blink */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: blink 1s infinite;
+}
+
+/* Neon text glow effect */
+.text-terminal-green {
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
+}
+
+/* Subtle glow for borders */
+.border-terminal-green {
+  box-shadow: 0 0 4px rgba(57, 255, 20, 0.3);
+}
+
+/* Command Palette Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.animate-in {
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.zoom-in-95 {
+  animation-name: zoomIn;
+}
+
+/* Command Palette Scrollbar */
+[cmdk-list] {
+  scrollbar-width: thin;
+  scrollbar-color: #1f2937 transparent;
+}
+
+[cmdk-list]::-webkit-scrollbar {
+  width: 8px;
+}
+
+[cmdk-list]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[cmdk-list]::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 4px;
+}
+
+[cmdk-list]::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+/* Command Group Headings */
+[cmdk-group-heading] {
+  user-select: none;
+  font-size: 12px;
+  color: rgba(179, 177, 173, 0.5);
+  padding: 0.5rem 0.5rem;
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+[cmdk-group-heading]:first-child {
+  margin-top: 0;
+}
