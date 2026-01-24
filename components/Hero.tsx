@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Terminal } from "lucide-react";
+import { Terminal, Download, Mail } from "lucide-react";
 
 export default function Hero() {
   const [text, setText] = useState("");
@@ -71,6 +71,26 @@ export default function Hero() {
                   Specializing in scalable infrastructure, CI/CD, and backend systems
                 </p>
               </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-3 mt-6 pt-4">
+              <a
+                href="#contact"
+                className="flex items-center gap-2 px-5 py-2.5 bg-terminal-green/10 hover:bg-terminal-green/20 border border-terminal-green/30 hover:border-terminal-green/50 rounded-lg text-terminal-green font-mono text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(57,255,20,0.3)]"
+              >
+                <Mail className="w-4 h-4" />
+                Contact Me
+              </a>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-terminal-cyan/10 hover:bg-terminal-cyan/20 border border-terminal-cyan/30 hover:border-terminal-cyan/50 rounded-lg text-terminal-cyan font-mono text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(89,194,255,0.3)]"
+              >
+                <Download className="w-4 h-4" />
+                Download Resume
+              </a>
             </div>
           </div>
         </motion.div>

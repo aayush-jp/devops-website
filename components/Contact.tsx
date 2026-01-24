@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Send } from "lucide-react";
+import { Mail, Github, Linkedin, Send, Activity } from "lucide-react";
 
 interface ContactLink {
   label: string;
@@ -87,7 +87,7 @@ export default function Contact() {
           ))}
         </div>
 
-        {/* Terminal Footer */}
+        {/* Technical Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -95,13 +95,54 @@ export default function Contact() {
           viewport={{ once: true }}
           className="border border-terminal-border rounded-lg bg-terminal-bg/30 backdrop-blur-sm p-6"
         >
-          <div className="flex items-start gap-3">
-            <span className="text-terminal-green shrink-0 drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">$</span>
-            <div className="flex-1">
-              <p className="text-terminal-text/70 text-sm font-mono">
-                <span className="text-terminal-yellow">echo</span> "Thanks for visiting! Built with Next.js, Tailwind CSS, and Framer Motion"
-              </p>
-              <p className="text-terminal-text/50 text-xs font-mono mt-2">
+          <div className="space-y-4">
+            {/* Main Footer Content */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex-1">
+                <p className="text-terminal-text font-mono text-sm mb-1">
+                  Designed & Built by <span className="text-terminal-green">Aayush JP</span>
+                </p>
+                <p className="text-terminal-text/60 font-mono text-xs">
+                  Deployed via Docker & Next.js
+                </p>
+              </div>
+              
+              {/* Status Indicator */}
+              <div className="flex items-center gap-2 px-4 py-2 bg-terminal-green/5 border border-terminal-green/20 rounded-lg">
+                <div className="relative">
+                  <div className="w-2 h-2 bg-terminal-green rounded-full drop-shadow-[0_0_6px_rgba(57,255,20,0.8)]" />
+                  <div className="absolute inset-0 w-2 h-2 bg-terminal-green rounded-full animate-ping opacity-75" />
+                </div>
+                <span className="text-terminal-green font-mono text-xs">
+                  Systems Normal
+                </span>
+              </div>
+            </div>
+
+            {/* Social Links & Copyright */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-4 border-t border-terminal-border/50">
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://github.com/aayush-jp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-terminal-text/60 hover:text-terminal-green transition-colors"
+                  aria-label="GitHub"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://linkedin.com/in/aayushjp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-terminal-text/60 hover:text-terminal-cyan transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+              
+              <p className="text-terminal-text/40 text-xs font-mono">
                 © 2026 Aayush JP. All rights reserved.
               </p>
             </div>

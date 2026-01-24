@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    image: aayush-portfolio:latest
+    container_name: aayush-portfolio
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - portfolio-network
+    labels:
+      - "com.example.description=Aayush JP Portfolio - DevOps & Cloud Engineer"
+      - "com.example.department=Personal"
+      - "com.example.project=portfolio"
+
+networks:
+  portfolio-network:
+    driver: bridge
+    name: portfolio-network

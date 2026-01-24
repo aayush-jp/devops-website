@@ -144,3 +144,24 @@ h1, h2, h3, h4, h5, h6, code, pre {
 [cmdk-group-heading]:first-child {
   margin-top: 0;
 }
+
+/* Status Indicator Pulse Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-ping {
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

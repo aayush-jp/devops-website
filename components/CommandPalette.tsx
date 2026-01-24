@@ -10,7 +10,8 @@ import {
   Linkedin, 
   Terminal,
   Copy,
-  ExternalLink
+  ExternalLink,
+  Download
 } from "lucide-react";
 import Toast from "./Toast";
 
@@ -154,6 +155,16 @@ export default function CommandPalette({ open, onOpenChange }: CommandPalettePro
                 <Copy className="w-4 h-4 text-terminal-yellow" />
                 <span className="flex-1">email</span>
                 <span className="text-terminal-text/40 text-xs">Copy email address</span>
+              </Command.Item>
+
+              <Command.Item
+                onSelect={() => openExternal("/resume.pdf")}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer hover:bg-terminal-cyan/10 hover:border-terminal-cyan/30 border border-transparent transition-all font-mono text-terminal-text mb-1"
+              >
+                <Download className="w-4 h-4 text-terminal-cyan" />
+                <span className="flex-1">resume</span>
+                <span className="text-terminal-text/40 text-xs">Download resume</span>
+                <ExternalLink className="w-3 h-3 text-terminal-text/40" />
               </Command.Item>
 
               <Command.Item

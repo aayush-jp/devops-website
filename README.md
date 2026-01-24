@@ -39,6 +39,8 @@ devops/
 
 ## Getting Started
 
+### Development Mode
+
 1. **Install dependencies:**
 
 ```bash
@@ -58,6 +60,28 @@ npm run dev
 3. **Open your browser:**
 
 Navigate to [http://localhost:3000](http://localhost:3000)
+
+### 🐋 Docker (Production)
+
+**Quick Start with Docker Compose:**
+
+```bash
+docker-compose up
+```
+
+**Or build and run manually:**
+
+```bash
+# Build the image
+docker build -t aayush-portfolio:latest .
+
+# Run the container
+docker run -p 3000:3000 aayush-portfolio:latest
+```
+
+Access the application at [http://localhost:3000](http://localhost:3000)
+
+📖 See [DOCKER.md](./DOCKER.md) for comprehensive Docker deployment guide.
 
 ## Customization
 
@@ -95,9 +119,30 @@ colors: {
 
 ## Deployment
 
+### Docker (Recommended for DevOps)
+
+The application is fully containerized for production deployment:
+
+```bash
+docker-compose up -d
+```
+
+Features:
+- ✅ Multi-stage build for minimal image size (~150MB)
+- ✅ Node.js 20 Alpine base
+- ✅ Next.js standalone output
+- ✅ Non-root user for security
+- ✅ Health checks included
+
+See [DOCKER.md](./DOCKER.md) for detailed instructions.
+
+### Vercel
+
 Deploy easily with Vercel:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+
+### Traditional
 
 Or build for production:
 
