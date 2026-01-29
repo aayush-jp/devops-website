@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for Next.js Portfolio
 # Optimized for production with minimal image size
 
-# Stage 1: Dependencies
+# Stage 1: Dependencies (Install ALL deps, including devDependencies)
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -9,9 +9,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm ci --only=production && \
-    npm cache clean --force
+# Install ALL dependencies (removed --only=production so we get Tailwind/TS)
+RUN npm ci
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
@@ -21,19 +20,18 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Set environment variables for build
+# Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+# NOTE: We do NOT set NODE_ENV=production here, so the build can use devDependencies
 
-# Install all dependencies (including devDependencies for build)
-RUN npm ci && \
-    npm run build
+# Build the application
+RUN npm run build
 
 # Stage 3: Runner (Production)
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Set environment variables
+# Set environment variables for runtime
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -43,11 +41,9 @@ RUN addgroup --system --gid 1001 nodejs && \
 
 # Copy necessary files from builder
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-
-# Set correct permissions
-RUN chown -R nextjs:nodejs /app
+# Automatically leverage output traces to reduce image size
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Switch to non-root user
 USER nextjs
