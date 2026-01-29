@@ -46,7 +46,7 @@ export default function Contact() {
             <span className="text-terminal-green font-mono text-sm drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">$ ./connect.sh</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-terminal-text mb-4 font-mono">
-            Let's Connect
+            Let&apos;s Connect
           </h2>
           <p className="text-terminal-text/70 max-w-2xl mx-auto">
             Open to opportunities in Cloud, DevOps, and Backend Development.
