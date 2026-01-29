@@ -9,8 +9,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm ci  && \
+# Install ALL dependencies (including devDependencies needed for build)
+RUN npm ci && \
     npm cache clean --force
 
 # Stage 2: Builder
@@ -19,15 +19,15 @@ WORKDIR /app
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
+
+# Copy all source files
 COPY . .
 
-# Set environment variables for build
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+# Set environment variable to disable telemetry
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install all dependencies (including devDependencies for build)
-RUN npm ci && \
-    npm run build
+# Build the Next.js application
+RUN npm run build
 
 # Stage 3: Runner (Production)
 FROM node:20-alpine AS runner
