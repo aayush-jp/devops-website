@@ -103,7 +103,7 @@ export default function Contact() {
                   Designed & Built by <span className="text-terminal-green">Aayush JP</span>
                 </p>
                 <p className="text-terminal-text/60 font-mono text-xs">
-                  Deployed via Docker & Next.js
+                  Deployed on AWS EC2 (Ubuntu) via Docker
                 </p>
               </div>
               
