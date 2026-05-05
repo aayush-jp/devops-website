@@ -175,18 +175,24 @@ push to main / dev
           ▼
 ┌─────────────────────┐
 │    Docker Build     │  docker build (validates Dockerfile)
+└─────────┬───────────┘
+          │ pass (main branch only)
+          ▼
+┌─────────────────────┐
+│   Deploy to EC2     │  SSH → git pull → docker-compose up -d --build
 └─────────────────────┘
 ```
 
 ### Jobs
 
-| Job | What it does |
-|---|---|
-| `lint-and-typecheck` | Runs ESLint and TypeScript compiler checks |
-| `build` | Runs the Next.js production build |
-| `docker` | Builds the Docker image to validate the Dockerfile |
+| Job | Trigger | What it does |
+|---|---|---|
+| `lint-and-typecheck` | push to `main` / `dev`, PR to `main` | ESLint + TypeScript compiler checks |
+| `build` | same | Next.js production build |
+| `docker` | same | Builds Docker image to validate the Dockerfile |
+| `deploy` | push to `main` only | SSH into EC2, pull latest, rebuild and restart container |
 
-Jobs run sequentially — a failure in an earlier job stops the pipeline. Workflow file: `.github/workflows/ci.yml`
+Jobs run sequentially — a failure in an earlier job stops the pipeline. The `deploy` job is skipped on `dev` pushes and PRs. Workflow file: `.github/workflows/ci.yml`
 
 ### Branching Strategy
 
