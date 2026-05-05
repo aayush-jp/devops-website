@@ -151,6 +151,50 @@ npm run build
 npm start
 ```
 
+## CI/CD Pipeline
+
+This project uses **GitHub Actions** for continuous integration.
+
+### Workflow
+
+The pipeline triggers automatically on every push to `main` or `dev`, and on pull requests to `main`.
+
+```
+push to main / dev
+        │
+        ▼
+┌─────────────────────┐
+│  Lint & Type Check  │  npm run lint + tsc --noEmit
+└─────────┬───────────┘
+          │ pass
+          ▼
+┌─────────────────────┐
+│       Build         │  npm run build (Next.js production build)
+└─────────┬───────────┘
+          │ pass
+          ▼
+┌─────────────────────┐
+│    Docker Build     │  docker build (validates Dockerfile)
+└─────────────────────┘
+```
+
+### Jobs
+
+| Job | What it does |
+|---|---|
+| `lint-and-typecheck` | Runs ESLint and TypeScript compiler checks |
+| `build` | Runs the Next.js production build |
+| `docker` | Builds the Docker image to validate the Dockerfile |
+
+Jobs run sequentially — a failure in an earlier job stops the pipeline. Workflow file: `.github/workflows/ci.yml`
+
+### Branching Strategy
+
+| Branch | Purpose |
+|---|---|
+| `main` | Production-ready code |
+| `dev` | Active development, merged into main via PR |
+
 ## License
 
 MIT License - feel free to use this template for your own portfolio!
