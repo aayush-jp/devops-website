@@ -13,7 +13,7 @@ interface ContactLink {
 const contactLinks: ContactLink[] = [
   {
     label: "GitHub",
-    href: "https://github.com/aayushjp",
+    href: "https://github.com/aayush-jp",
     icon: <Github className="w-5 h-5" />,
     command: "git clone github.com/aayushjp",
   },
@@ -25,9 +25,9 @@ const contactLinks: ContactLink[] = [
   },
   {
     label: "Email",
-    href: "mailto:aayush@example.com",
+    href: "mailto:imaayushjp@gmail.com",
     icon: <Mail className="w-5 h-5" />,
-    command: "echo 'hello' | mail aayush@example.com",
+    command: "echo 'hello' | mail imaayushjp@gmail.com",
   },
 ];
 

@@ -151,6 +151,56 @@ npm run build
 npm start
 ```
 
+## CI/CD Pipeline
+
+This project uses **GitHub Actions** for continuous integration.
+
+### Workflow
+
+The pipeline triggers automatically on every push to `main` or `dev`, and on pull requests to `main`.
+
+```
+push to main / dev
+        │
+        ▼
+┌─────────────────────┐
+│  Lint & Type Check  │  npm run lint + tsc --noEmit
+└─────────┬───────────┘
+          │ pass
+          ▼
+┌─────────────────────┐
+│       Build         │  npm run build (Next.js production build)
+└─────────┬───────────┘
+          │ pass
+          ▼
+┌─────────────────────┐
+│    Docker Build     │  docker build (validates Dockerfile)
+└─────────┬───────────┘
+          │ pass (main branch only)
+          ▼
+┌─────────────────────┐
+│   Deploy to EC2     │  SSH → git pull → docker-compose up -d --build
+└─────────────────────┘
+```
+
+### Jobs
+
+| Job | Trigger | What it does |
+|---|---|---|
+| `lint-and-typecheck` | push to `main` / `dev`, PR to `main` | ESLint + TypeScript compiler checks |
+| `build` | same | Next.js production build |
+| `docker` | same | Builds Docker image to validate the Dockerfile |
+| `deploy` | push to `main` only | SSH into EC2, pull latest, rebuild and restart container |
+
+Jobs run sequentially — a failure in an earlier job stops the pipeline. The `deploy` job is skipped on `dev` pushes and PRs. Workflow file: `.github/workflows/ci.yml`
+
+### Branching Strategy
+
+| Branch | Purpose |
+|---|---|
+| `main` | Production-ready code |
+| `dev` | Active development, merged into main via PR |
+
 ## License
 
 MIT License - feel free to use this template for your own portfolio!

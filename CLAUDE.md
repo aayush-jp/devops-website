@@ -1,0 +1,65 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project
+
+Terminal-aesthetic portfolio for Aayush JP (Cloud & DevOps Engineer). Single-page Next.js app deployed on AWS EC2 via Docker.
+
+## Commands
+
+```bash
+npm run dev       # Start dev server at localhost:3000
+npm run build     # Production build
+npm run lint      # ESLint check
+
+# Docker
+docker-compose up           # Build and run production container
+docker-compose up --build   # Force rebuild
+docker build -t aayush-portfolio:latest .
+```
+
+There are no tests — `package.json` has no test script.
+
+## Architecture
+
+Single-page app (`app/page.tsx`) that renders all sections sequentially. The page is a client component (`"use client"`) because it holds `commandPaletteOpen` state passed down to `Navbar` and `CommandPalette`.
+
+**Section order:** Hero → TechStack → Projects → Experience → Contact. Each section is wrapped in a `<div id="...">` for the command palette's scroll-to navigation.
+
+**CommandPalette** (`components/CommandPalette.tsx`) uses the `cmdk` library, triggered by `Ctrl+K`. It handles navigation (scroll to section), copying email, and opening external links. The `<Toast>` component is always mounted (even when the palette is closed) to persist toast visibility after the palette closes.
+
+**Animations:** All components use Framer Motion. Sections use `whileInView` with `viewport={{ once: true }}` — animations only trigger once on scroll-in. The hero typing effect runs via `setInterval` in a `useEffect`.
+
+## Styling
+
+Custom terminal color palette defined in `tailwind.config.ts`:
+
+| Token | Hex | Usage |
+|---|---|---|
+| `terminal-bg` | `#0a0e14` | Page/card backgrounds |
+| `terminal-text` | `#b3b1ad` | Body text |
+| `terminal-green` | `#39ff14` | Primary accents, CTAs, neon glow |
+| `terminal-cyan` | `#59c2ff` | Links, secondary interactive |
+| `terminal-yellow` | `#f29668` | Warnings, experience section |
+| `terminal-border` | `#1f2937` | Card borders |
+
+Fonts: **JetBrains Mono** (`font-mono`) for all technical/heading text; **Inter** (`font-sans`) for paragraph text. Both loaded via `next/font/google`.
+
+Neon glow is applied via Tailwind's `drop-shadow` utility: `drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]`.
+
+## Content Updates
+
+All content is hardcoded in component files — no CMS or external data source:
+
+- **Projects** → `components/Projects.tsx`, `projects` array
+- **Tech stack** → `components/TechStack.tsx`, `techStack` array
+- **Experience** → `components/Experience.tsx`, `experiences` array
+- **Contact links** → `components/Contact.tsx`, `contactLinks` array (also update email in `CommandPalette.tsx`)
+- **Meta / SEO** → `app/layout.tsx`
+
+## Deployment
+
+Deployed on AWS EC2 (Ubuntu) using Docker. The Dockerfile is a 3-stage build (deps → builder → runner) producing a standalone Next.js output with a non-root user and health check. See `DOCKER.md` and `AWS_EC2_DEPLOYMENT.md` for full deployment steps.
+
+`next.config.js` must have `output: 'standalone'` for the Docker runner stage to work.
