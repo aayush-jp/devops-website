@@ -75,4 +75,5 @@ jobs:
           script: |
             cd /home/ubuntu/devops-website
             git pull origin main
+            docker system prune -f
             docker-compose up -d --build
