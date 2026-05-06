@@ -9,17 +9,17 @@ Terminal-aesthetic portfolio for Aayush JP (Cloud & DevOps Engineer). Single-pag
 ## Commands
 
 ```bash
-npm run dev       # Start dev server at localhost:3000
-npm run build     # Production build
-npm run lint      # ESLint check
+npm run dev        # Start dev server at localhost:3000
+npm run build      # Production build
+npm run lint       # ESLint check
+npm run typecheck  # TypeScript compiler check (tsc --noEmit)
 
-# Docker
-docker-compose up           # Build and run production container
-docker-compose up --build   # Force rebuild
+# Docker (local only)
 docker build -t aayush-portfolio:latest .
+docker run -p 3000:3000 aayush-portfolio:latest
 ```
 
-There are no tests — `package.json` has no test script.
+There are no tests — `package.json` has no test script. `typecheck` and `lint` serve as the automated quality gates in CI.
 
 ## Architecture
 
@@ -58,8 +58,14 @@ All content is hardcoded in component files — no CMS or external data source:
 - **Contact links** → `components/Contact.tsx`, `contactLinks` array (also update email in `CommandPalette.tsx`)
 - **Meta / SEO** → `app/layout.tsx`
 
-## Deployment
+## CI/CD & Deployment
 
-Deployed on AWS EC2 (Ubuntu) using Docker. The Dockerfile is a 3-stage build (deps → builder → runner) producing a standalone Next.js output with a non-root user and health check. See `DOCKER.md` and `AWS_EC2_DEPLOYMENT.md` for full deployment steps.
+**Pipeline:** GitHub Actions (`.github/workflows/ci.yml`) — triggers on push to `main` or `dev`.
 
-`next.config.js` must have `output: 'standalone'` for the Docker runner stage to work.
+**Flow:** `lint-and-typecheck → build → docker (build & push to GHCR) → deploy (main only)`
+
+**Deployment:** The Docker image is built on GitHub's runners and pushed to `ghcr.io/aayush-jp/devops-website:latest`. The deploy job SSHes into AWS EC2 (`ubuntu@51.20.59.167`) and pulls the pre-built image — no building happens on EC2.
+
+**Dockerfile:** 3-stage build (deps → builder → runner) producing a standalone Next.js output. `next.config.js` must keep `output: 'standalone'` for this to work.
+
+**Branching:** `main` = production (triggers deploy), `dev` = active development (CI only, no deploy).
