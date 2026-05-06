@@ -61,27 +61,17 @@ npm run dev
 
 Navigate to [http://localhost:3000](http://localhost:3000)
 
-### 🐋 Docker (Production)
-
-**Quick Start with Docker Compose:**
+### 🐋 Docker (Local)
 
 ```bash
-docker-compose up
-```
-
-**Or build and run manually:**
-
-```bash
-# Build the image
+# Build and run locally
 docker build -t aayush-portfolio:latest .
-
-# Run the container
 docker run -p 3000:3000 aayush-portfolio:latest
 ```
 
 Access the application at [http://localhost:3000](http://localhost:3000)
 
-📖 See [DOCKER.md](./DOCKER.md) for comprehensive Docker deployment guide.
+📖 See [DOCKER.md](./DOCKER.md) for a full Docker reference.
 
 ## Customization
 
@@ -119,37 +109,16 @@ colors: {
 
 ## Deployment
 
-### Docker (Recommended for DevOps)
+Production deployment is fully automated via the CI/CD pipeline. Every push to `main` builds a Docker image on GitHub Actions, pushes it to GitHub Container Registry (GHCR), and deploys it to AWS EC2.
 
-The application is fully containerized for production deployment:
-
-```bash
-docker-compose up -d
-```
-
-Features:
-- ✅ Multi-stage build for minimal image size (~150MB)
+The Dockerfile is a 3-stage build (deps → builder → runner):
+- ✅ Multi-stage build for minimal image size
 - ✅ Node.js 20 Alpine base
 - ✅ Next.js standalone output
 - ✅ Non-root user for security
 - ✅ Health checks included
 
-See [DOCKER.md](./DOCKER.md) for detailed instructions.
-
-### Vercel
-
-Deploy easily with Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
-
-### Traditional
-
-Or build for production:
-
-```bash
-npm run build
-npm start
-```
+See [DOCKER.md](./DOCKER.md) and [AWS_EC2_DEPLOYMENT.md](./AWS_EC2_DEPLOYMENT.md) for manual deployment steps.
 
 ## CI/CD Pipeline
 
@@ -174,12 +143,13 @@ push to main / dev
           │ pass
           ▼
 ┌─────────────────────┐
-│    Docker Build     │  docker build (validates Dockerfile)
+│  Docker Build &     │  Build image + push to GHCR
+│  Push to GHCR       │  (ghcr.io/aayush-jp/devops-website:latest)
 └─────────┬───────────┘
           │ pass (main branch only)
           ▼
 ┌─────────────────────┐
-│   Deploy to EC2     │  SSH → git pull → docker-compose up -d --build
+│   Deploy to EC2     │  SSH → docker pull → docker run
 └─────────────────────┘
 ```
 
@@ -189,8 +159,8 @@ push to main / dev
 |---|---|---|
 | `lint-and-typecheck` | push to `main` / `dev`, PR to `main` | ESLint + TypeScript compiler checks |
 | `build` | same | Next.js production build |
-| `docker` | same | Builds Docker image to validate the Dockerfile |
-| `deploy` | push to `main` only | SSH into EC2, pull latest, rebuild and restart container |
+| `docker` | same | Builds image on GitHub runners and pushes to GHCR |
+| `deploy` | push to `main` only | SSH into EC2, pulls pre-built image from GHCR, restarts container |
 
 Jobs run sequentially — a failure in an earlier job stops the pipeline. The `deploy` job is skipped on `dev` pushes and PRs. Workflow file: `.github/workflows/ci.yml`
 
