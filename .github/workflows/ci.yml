@@ -87,10 +87,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           command_timeout: 10m
           script: |
-            docker system prune -f
             docker pull ghcr.io/aayush-jp/devops-website:latest
             docker stop aayush-portfolio 2>/dev/null || true
             docker rm aayush-portfolio 2>/dev/null || true
+            docker ps -q --filter "publish=3000" | xargs -r docker stop
+            docker ps -aq --filter "publish=3000" | xargs -r docker rm
+            sudo fuser -k 3000/tcp 2>/dev/null || true
+            docker system prune -f
             docker run -d \
               --name aayush-portfolio \
               --restart unless-stopped \
